@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='utf-8'>
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+		<title>Votação IFRO</title>
+		<meta name='viewport' content='width=device-width, initial-scale=1'>
+		<link rel='stylesheet' type='text/css' media='screen' href='estilo.css'>
+	</head>
+	<body>
+		<div id="wrapper">
+			<div id="comecar" onclick="reiniciar()">
+				<fieldset>
+					<p>Aperte na tela para começar!</p>
+				</fieldset>
+			</div>
+			<div id="cpf" onclick="resetarTimer()">
+				<fieldset>
+					<p>Digite seu CPF:</p>
+					<input type="text" id="cpfInput" placeholder="000.000.000-00" maxlength="14" onkeypress="mascara(this, '###.###.###-##');">
+					<div id="teclado">
+						<button onclick="adicionarNumero('1')">1</button>
+						<button onclick="adicionarNumero('2')">2</button>
+						<button onclick="adicionarNumero('3')">3</button>
+						<button onclick="adicionarNumero('4')">4</button>
+						<button onclick="adicionarNumero('5')">5</button>
+						<button onclick="adicionarNumero('6')">6</button>
+						<button onclick="adicionarNumero('7')">7</button>
+						<button onclick="adicionarNumero('8')">8</button>
+						<button onclick="adicionarNumero('9')">9</button>
+						<button onclick="adicionarNumero('0')">0</button>
+						<button onclick="limpar()">Limpar</button>
+					</div>
+					<button id="btnVotar" onclick="votar()" class="destaque">Avançar</button>
+				</fieldset>
+			</div>
+			<div id="votacao" onclick="resetarTimer()">
+				<fieldset>
+					<p>Escolha uma opção:</p>
+					<div class="opcoes">
+						<button onclick="votar('1')">1</button>
+						<button onclick="votar('2')">2</button>
+						<button onclick="votar('3')">3</button>
+						<button onclick="votar('4')">4</button>
+						<button onclick="votar('5')">5</button>
+						<button onclick="votar('6')">6</button>
+						<button onclick="votar('7')">7</button>
+						<button onclick="votar('8')">8</button>
+						<button onclick="votar('9')">9</button>
+					</div>
+				</fieldset>
+			</div>
+			<div id="confirmar">
+				<fieldset>
+					<p>Você votou na opção: <span id="opcaoSelecionada"></span></p>
+					<button onclick="confirmarVoto()" class="destaque">Confirmar</button>
+					<button onclick="cancelarVoto()">Cancelar</button>
+				</fieldset>
+			</div>
+			<div id="fim">
+				<fieldset>
+					<p>✅</p>
+					<p>Obrigado por votar!</p>
+				</fieldset>
+			</div>
+		</div>
+		<div id="timer"></div>
+		<script src='votacao.js'></script>
+	</body>
+</html>

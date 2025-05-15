@@ -1,0 +1,154 @@
+body {
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	font-size: 4em;
+}
+p {
+	margin: 1rem;
+}
+button, input[type="text"] {
+	font-size: 1em;
+	padding: 1rem;
+	margin: 0.5rem;
+	border-radius: 0.5rem;
+	border: 1px solid #0002;
+	text-align: center;
+	min-width: 2em;
+	position: relative;
+	transition: 0.2s ease-in-out;
+	cursor: pointer;
+}
+button:active {
+	background-color: #000;
+	color: #FFF;
+}
+button.destaque {
+	background-color: #0F02;
+	margin: 1rem auto;
+	display: block;
+}
+input[type="text"].alerta {
+	background-color: #F002;
+	color: #F00;
+	left: 0rem;
+	animation: alertar 0.5s ease-in-out forwards;
+}
+input[type="text"].alerta::placeholder {
+	color: #F008;
+}
+@keyframes alertar {
+	0% {
+		left: 0rem;
+		background-color: #F002;
+	}
+	10% {
+		left: 0.5rem;
+	}
+	20% {
+		left: -0.5rem;
+	}
+	30% {
+		left: 0.5rem;
+	}
+	40% {
+		left: -0.5rem;
+	}
+	50% {
+		left: 0.5rem;
+		background-color: #FFF8;
+	}
+	60% {
+		left: -0.5rem;
+	}
+	70% {
+		left: 0.5rem;
+	}
+	80% {
+		left: -0.5rem;
+	}
+	90% {
+		left: 0.5rem;
+	}
+	100% {
+		left: 0rem;
+		background-color: #F002;
+	}
+}
+#wrapper {
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+#wrapper>div {
+	overflow: hidden;
+	height: 0px;
+	display: flex;
+	width: 100%;
+	align-items: center;
+	transition: height 0.5s ease-in-out;
+}
+#wrapper>div.ativo {
+	height: 100vh;
+}
+fieldset {
+	border: 1px solid #0002;
+	box-shadow: 2px 5px 10px #0002;
+	background-color: #FFF8;
+	border-radius: 1rem;
+	margin: 0px;
+	padding: 1rem 2rem;
+	margin: 0 auto;
+	text-align: center;
+}
+#teclado {
+	margin: 1rem auto;
+	display: grid;
+	width: 50vw;
+	grid-template-columns: repeat(3, 1fr);
+	grid-template-rows: repeat(4, 1fr);
+}
+#teclado button:last-child {
+	grid-column: 2 / span 2;
+}
+#confirmar {
+	background-color: #FF02;
+}
+#fim {
+	background-color: #0F02;
+}
+#timer {
+	display: block;
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	height: 0em;
+	width: 0%;
+	background-color: #000;
+	transition: height 0.5s ease-in-out;
+	animation-fill-mode: none;
+	animation-iteration-count: 1;
+	animation-timing-function: linear;
+	animation-name: timer;
+}
+@keyframes timer {
+	0% {
+		background-color: #000;
+		width: 100%;
+	}
+	75% {
+		background-color: #000;
+	}
+	100% {
+		background-color: #F00;
+		width: 0%;
+	}
+}
+.opcoes {
+	display: flex;
+	max-width: 80vw;
+	justify-content: center;
+	flex-wrap: wrap;
+}
