@@ -181,3 +181,14 @@ fieldset {
 	border-radius: 1rem;
 	margin: 0.5rem;
 }
+.aviso {
+	font-size: 1.5rem;
+	text-align: center;
+	background-color: #FA06;
+	border: 1px solid #FA08;
+	border-radius: 1rem;
+	padding: 1rem;
+}
+.aviso::before {
+	content: "⚠️ ";
+}

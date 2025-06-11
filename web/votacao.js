@@ -1,5 +1,7 @@
 const cpfInput = document.getElementById('cpfInput');
 const barraTimer = document.getElementById("timer");
+const avisoCPF = document.getElementById("avisoCPF");
+const enderecoServidor = "http://localhost/TotemVotacao/server/"; // Altere para o endereço do seu servidor se necessário
 
 var timerRetornar = null;
 var telaAtiva = "comecar";
@@ -65,14 +67,45 @@ function votar(opcao) {
 	} else {
 		const cpfValido = validaCPF(document.getElementById('cpfInput').value);
 		if (cpfValido) {
-			ativarTela("votacao");
+			// Bloqueia a tela de CPF e aguarda resposta do servidor sobre a existência ou não do voto deste CPF
+			travarTela("cpf");
+			const cpfNumeros = cpfInput.value.replace(/\D/g, '');
+			fetch(enderecoServidor + 'index.php?cpf=' + cpfNumeros)
+				.then(response => response.json())
+				.then(data => {
+					if (data === true) {
+						avisoCPF.style.removeProperty("display");
+					} else {
+						avisoCPF.style.display = "none";
+					}
+					travarTela("cpf", false);
+					ativarTela("votacao");
+				})
+				.catch(error => {
+					console.error('Erro ao consultar o servidor:', error);
+					travarTela("cpf", false);
+					ativarTela("votacao");
+				});
 		}
 	}
 }
 
 // Função para confirmar o voto
 function confirmarVoto() {
-	ativarTela("fim", tempoFim);
+	travarTela("votacao");
+	const cpfNumeros = cpfInput.value.replace(/\D/g, '');
+	const opcao = document.getElementById('opcaoSelecionada').textContent;
+	fetch(`${enderecoServidor}index.php?cpf=${cpfNumeros}&voto=${opcao}`)
+		.then(response => response.json())
+		.then(data => {
+			travarTela("votacao", false);
+			ativarTela("fim", tempoFim);
+		})
+		.catch(error => {
+			console.error('Erro ao enviar voto:', error);
+			travarTela("votacao", false);
+			ativarTela("fim", tempoFim);
+		});
 }
 
 // Função para cancelar o voto e voltar à tela de votação
@@ -86,6 +119,13 @@ function reiniciar() {
 	limpar();
 }
 
+function travarTela(argTela,argTravar = true) {
+	if (argTravar) {
+		document.getElementById(argTela).disabled = true;
+	} else {
+		document.getElementById(argTela).disabled = false;
+	}
+}
 function ativarTela(argTela,argTempo = tempoPadrao) {
 	document.getElementById(telaAtiva).classList.remove("ativo");
 	telaAtiva = argTela;
@@ -98,6 +138,7 @@ function resetarTotem() {
 	clearTimeout(timerRetornar);
 	barraTimer.style.height = null;
 	barraTimer.style.animation = 'none';
+	avisoCPF.style.display = "none";
 }
 function resetarTimer(argTempo = tempoPadrao) {
 	console.log(argTempo);
