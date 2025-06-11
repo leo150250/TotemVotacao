@@ -19,6 +19,7 @@ button, input[type="text"] {
 	position: relative;
 	transition: 0.2s ease-in-out;
 	cursor: pointer;
+	width: 80%;
 }
 button:active {
 	background-color: #000;
@@ -110,6 +111,9 @@ fieldset {
 	grid-template-columns: repeat(3, 1fr);
 	grid-template-rows: repeat(4, 1fr);
 }
+#teclado button {
+	width: unset;
+}
 #teclado button:last-child {
 	grid-column: 2 / span 2;
 }
@@ -151,4 +155,29 @@ fieldset {
 	max-width: 80vw;
 	justify-content: center;
 	flex-wrap: wrap;
+}
+.opcoes button {
+	width: 10rem;
+}
+.apoiadores {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	max-width: 80vw;
+	margin: 0 auto;
+	flex-wrap: wrap;
+}
+.apoiadores p {
+	font-size: 2rem;
+	flex-basis: 100%;
+	text-align: center;
+}
+.apoiadores img {
+	width: 10rem;
+	max-width: 50%;
+	height: auto;
+	border-radius: 1rem;
+	margin: 0.5rem;
 }
