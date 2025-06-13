@@ -184,6 +184,7 @@ fieldset {
 	max-width: 80vw;
 	justify-content: center;
 	flex-wrap: wrap;
+	margin: 0 auto;
 }
 .opcoes button {
 	width: 10rem;
