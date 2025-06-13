@@ -11,6 +11,24 @@ body {
 p {
 	margin: 1rem;
 }
+p.piscar {
+	opacity: 0;
+	animation: piscar 2s linear infinite;
+}
+@keyframes piscar {
+	0% {
+		opacity: 0;
+	}
+	40% {
+		opacity: 1;
+	}
+	60% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
 button, input[type="text"] {
 	font-size: 1em;
 	padding: 1rem;
