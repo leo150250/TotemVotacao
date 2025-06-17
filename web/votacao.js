@@ -14,11 +14,13 @@ function adicionarNumero(numero) {
 		cpfInput.value += numero;
 	}
 	mascara(cpfInput, '###.###.###-##');
+	cpfInput.focus();
 }
 
 // Função para limpar o campo de CPF
 function limpar() {
 	document.getElementById('cpfInput').value = '';
+	cpfInput.focus();
 }
 
 // Função para aplicar a máscara no CPF
@@ -63,7 +65,7 @@ function alertarCPF() {
 function votar(opcao) {
 	if (opcao) {
 		document.getElementById('opcaoSelecionada').textContent = opcao;
-		ativarTela("confirmar");
+		ativarTela("confirmar", 20000);
 	} else {
 		const cpfValido = validaCPF(document.getElementById('cpfInput').value);
 		if (cpfValido) {
@@ -79,12 +81,12 @@ function votar(opcao) {
 						avisoCPF.style.display = "none";
 					}
 					travarTela("cpf", false);
-					ativarTela("votacao");
+					ativarTela("votacao", 20000);
 				})
 				.catch(error => {
 					console.error('Erro ao consultar o servidor:', error);
 					travarTela("cpf", false);
-					ativarTela("votacao");
+					ativarTela("votacao", 20000);
 				});
 		}
 	}
@@ -130,6 +132,7 @@ function ativarTela(argTela,argTempo = tempoPadrao) {
 	document.getElementById(telaAtiva).classList.remove("ativo");
 	telaAtiva = argTela;
 	document.getElementById(telaAtiva).classList.add("ativo");
+	document.getElementById(telaAtiva).focus();
 	resetarTimer(argTempo);
 }
 function resetarTotem() {
@@ -139,9 +142,10 @@ function resetarTotem() {
 	barraTimer.style.height = null;
 	barraTimer.style.animation = 'none';
 	avisoCPF.style.display = "none";
+	document.body.focus();
 }
 function resetarTimer(argTempo = tempoPadrao) {
-	console.log(argTempo);
+	//console.log(argTempo);
 	clearTimeout(timerRetornar);
 	timerRetornar = setTimeout(resetarTotem,argTempo);
 	barraTimer.style.animation = 'none';
@@ -150,6 +154,44 @@ function resetarTimer(argTempo = tempoPadrao) {
 	barraTimer.style.animationDuration = argTempo + "ms";
 	barraTimer.style.animationPlayState = "running";
 	barraTimer.style.height = "1rem";
+}
+function computarTecla(event) {
+	console.log(event.key || event.code);
+	switch (telaAtiva) {
+		case "comecar": {
+			reiniciar();
+		} break;
+		case "cpf": {
+			if (event.key >= '0' && event.key <= '9') {
+				event.preventDefault();
+				adicionarNumero(event.key);
+			} else if (event.key === 'Backspace') {
+				limpar();
+			} else if (event.key === 'Enter') {
+				votar();
+			}
+		} break;
+		case "votacao": {
+			if (event.key >= '0' && event.key <= '9') {
+				event.preventDefault();
+				let voto = event.key;
+				if (voto == "0") {
+					voto = "10";
+				}
+				votar(voto);
+			}
+		} break;
+		case "confirmar": {
+			if (event.key === 'Enter') {
+				confirmarVoto();
+			} else if (event.key === 'Esc' || event.key === 'Escape' || event.key === 'Backspace') {
+				cancelarVoto();
+			}
+		} break;
+	}
+	if (telaAtiva !== "fim") {
+		resetarTimer();
+	}
 }
 
 resetarTotem();
