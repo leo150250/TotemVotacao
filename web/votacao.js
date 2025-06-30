@@ -107,7 +107,7 @@ function votar(opcao) {
 	if (opcao) {
 		document.getElementById('opcaoSelecionada').textContent = opcao;
 		imgFotoSelecionada.src = `fotos/${opcao}.jpg`; // Atualiza a imagem com base na opção selecionada
-		nomeFotoSelecionada.textContent = nomesFotos[opcao - 1]; // Atualiza o nome da foto
+		nomeFotoSelecionada.textContent = '"' + nomesFotos[opcao - 1] + '"'; // Atualiza o nome da foto
 		ativarTela("confirmar", 20000);
 	} else {
 		const cpfValido = validaCPF(document.getElementById('cpfInput').value);

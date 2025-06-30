@@ -233,10 +233,18 @@ fieldset {
 	max-width: 80%;
 }
 #fotoSelecionada {
+	max-width: 75vw;
 	max-height: 50vh;
+	padding: 1rem;
+	background-color: #FFF;
+	border: 2px groove #888;
+	box-shadow: 2px 5px 10px #0008;
 }
 #nomeFotoSelecionada {
 	font-size: 2rem;
+	margin-top: 0rem;
+	margin-bottom: 0.5rem;
+	font-style: italic;
 }
 #alertaFallback {
 	position: fixed;
