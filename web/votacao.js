@@ -164,6 +164,7 @@ function cancelarVoto() {
 function reiniciar() {
 	ativarTela("cpf");
 	limpar();
+	verificarServidor();
 }
 
 function travarTela(argTela,argTravar = true) {
@@ -183,6 +184,7 @@ function ativarTela(argTela,argTempo = tempoPadrao) {
 function resetarTotem() {
 	ativarTela("comecar");
 	limpar();
+	verificarServidor();
 	clearTimeout(timerRetornar);
 	barraTimer.style.height = null;
 	barraTimer.style.animation = 'none';
