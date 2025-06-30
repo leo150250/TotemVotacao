@@ -1,7 +1,48 @@
 const cpfInput = document.getElementById('cpfInput');
 const barraTimer = document.getElementById("timer");
 const avisoCPF = document.getElementById("avisoCPF");
-const enderecoServidor = "http://localhost/TotemVotacao/server/"; // Altere para o endereço do seu servidor se necessário
+const imgFotoSelecionada = document.getElementById("fotoSelecionada");
+const nomesFotos = [
+	"Secagem do cacau",
+	"Raízes da esperança",
+	"Ouro nas mãos",
+	"O novo eldorado",
+	"Fases do cacau: Da flor ao chocolate",
+	"Exuberância efêmera",
+	"Duas metades",
+	"Com as mãos no café",
+	"Café na manhã",
+	"Cacoal, aromas de época"
+];
+const nomeFotoSelecionada = document.getElementById("nomeFotoSelecionada");
+const divAlertaFallback = document.getElementById("alertaFallback");
+
+// Verifica se o servidor está acessível
+const enderecoServidorNormal = "http://localhost/TotemVotacao/server/"; // Altere para o endereço do seu servidor se necessário
+const enderecoServidorFallback = "http://localhost/TotemVotacao/server/"; // Endereço de fallback caso o servidor principal não esteja acessível
+var enderecoServidor = enderecoServidorNormal; // Variável para armazenar o endereço do servidor
+
+function verificarServidor() {
+	// Verifica se o servidor está acessível
+	fetch(enderecoServidor + 'index.php?check=true')
+		.then(response => {
+			if (!response.ok) {
+				divAlertaFallback.style.display = "block"; // Exibe o alerta se o servidor não estiver acessível
+				enderecoServidor = enderecoServidorFallback; // Altera o endereço do servidor para o fallback
+				console.warn('Servidor principal não acessível, usando fallback:', enderecoServidor);
+			} else {
+				divAlertaFallback.style.display = "none"; // Oculta o alerta se o servidor estiver acessível
+				console.log('Servidor principal acessível:', enderecoServidor);
+				enderecoServidor = enderecoServidorNormal; // Garante que o endereço do servidor seja o normal
+			}
+		})
+		.catch(error => {
+			console.error('Erro ao verificar o servidor:', error);
+			divAlertaFallback.style.display = "block"; // Exibe o alerta se houver erro na verificação
+			enderecoServidor = enderecoServidorFallback; // Altera o endereço do servidor para o fallback
+		});
+}
+verificarServidor();
 
 var timerRetornar = null;
 var telaAtiva = "comecar";
@@ -65,6 +106,8 @@ function alertarCPF() {
 function votar(opcao) {
 	if (opcao) {
 		document.getElementById('opcaoSelecionada').textContent = opcao;
+		imgFotoSelecionada.src = `fotos/${opcao}.jpg`; // Atualiza a imagem com base na opção selecionada
+		nomeFotoSelecionada.textContent = nomesFotos[opcao - 1]; // Atualiza o nome da foto
 		ativarTela("confirmar", 20000);
 	} else {
 		const cpfValido = validaCPF(document.getElementById('cpfInput').value);
@@ -72,6 +115,7 @@ function votar(opcao) {
 			// Bloqueia a tela de CPF e aguarda resposta do servidor sobre a existência ou não do voto deste CPF
 			travarTela("cpf");
 			const cpfNumeros = cpfInput.value.replace(/\D/g, '');
+			verificarServidor();
 			fetch(enderecoServidor + 'index.php?cpf=' + cpfNumeros)
 				.then(response => response.json())
 				.then(data => {
@@ -97,6 +141,7 @@ function confirmarVoto() {
 	travarTela("votacao");
 	const cpfNumeros = cpfInput.value.replace(/\D/g, '');
 	const opcao = document.getElementById('opcaoSelecionada').textContent;
+	verificarServidor();
 	fetch(`${enderecoServidor}index.php?cpf=${cpfNumeros}&voto=${opcao}`)
 		.then(response => response.json())
 		.then(data => {
@@ -182,6 +227,7 @@ function computarTecla(event) {
 			}
 		} break;
 		case "confirmar": {
+			event.preventDefault();
 			if (event.key === 'Enter') {
 				confirmarVoto();
 			} else if (event.key === 'Esc' || event.key === 'Escape' || event.key === 'Backspace') {

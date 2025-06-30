@@ -38,7 +38,7 @@ button, input[type="text"] {
 	text-align: center;
 	min-width: 2em;
 	position: relative;
-	transition: 0.1s ease-in-out;
+	transition: 0.25s ease-in-out;
 	cursor: pointer;
 	width: 80%;
 }
@@ -46,6 +46,7 @@ button {
 	background-color: #b19b8f;
 }
 button:active {
+	transition: 0s;
 	background-color: #000;
 	color: #FFF;
 }
@@ -53,6 +54,10 @@ button.destaque {
 	background-color: #0F02;
 	margin: 1rem auto;
 	display: block;
+}
+button.destaque:active {
+	background-color: #080;
+	color: #FFF;
 }
 input[type="text"].alerta {
 	background-color: #F002;
@@ -226,4 +231,40 @@ fieldset {
 .logo {
 	width: 25rem;
 	max-width: 80%;
+}
+#fotoSelecionada {
+	max-height: 50vh;
+}
+#nomeFotoSelecionada {
+	font-size: 2rem;
+}
+#alertaFallback {
+	position: fixed;
+	top: 0px;
+	right: 0px;
+	z-index: 1;
+	font-size: 1rem;
+	background-color: #FA0;
+	padding: 1rem;
+	font-weight: bold;
+	border-bottom-left-radius: 1rem;
+	box-shadow: 0px 4px 6px #000F;
+	animation: animAlertaFallback 1s ease-in-out infinite;
+}
+@keyframes animAlertaFallback {
+	0% {
+		background-color: #FA0;
+	}
+	49% {
+		background-color: #FA0;
+	}
+	50% {
+		background-color: #F80;
+	}
+	99% {
+		background-color: #F80;
+	}
+	0% {
+		background-color: #FA0;
+	}
 }
