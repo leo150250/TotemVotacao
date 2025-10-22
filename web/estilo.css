@@ -43,9 +43,9 @@ button, input[type="text"] {
 	width: 80%;
 }
 button {
-	background-color: #b19b8f;
+	background-color: #bbb;
 }
-button:active {
+button:active, button.active {
 	transition: 0s;
 	background-color: #000;
 	color: #FFF;
@@ -55,7 +55,7 @@ button.destaque {
 	margin: 1rem auto;
 	display: block;
 }
-button.destaque:active {
+button.destaque:active, button.destaque.active {
 	background-color: #080;
 	color: #FFF;
 }

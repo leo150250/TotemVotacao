@@ -1,25 +1,46 @@
-﻿const cpfInput = document.getElementById('cpfInput');
+﻿// Personalize seu sistema alterando estas variáveis abaixo
+
+// Nomes das opções de votação. Observe que o número de itens nesta lista define o número de opções disponíveis na votação.
+const nomesFotos = [
+	"Café 01",
+	"Café 02",
+	"Café 03",
+	"Café 04",
+	"Café 05",
+	"Café 06",
+	"Café 07",
+	"Café 08",
+	"Café 09",
+	"Café 10"
+];
+// Ainda, modifique as imagens na pasta "imagens" para corresponder aos nomes e quantidade de opções aqui definidas.
+// Observe que, caso haja mais de 10 opções, a votação será feita por meio de digitação do número da opção, e não por botões numéricos.
+
+// Adicione os arquivos de imagens dos apoiadores aqui, separados por vírgula. Exemplo: "logo1.png","logo2.png"
+// Observe que a logo do IFRO já está inclusa automaticamente no index.html
+const logosApoiadores = [
+];
+
+//Tempos das telas em milissegundos
+var tempoPadrao = 25000;
+var tempoFim = 5000;
+
+//Conexão a servidor de concentração de votos
+const enderecoServidorNormal = "http://localhost/TotemVotacao/server/"; // Altere para o endereço do seu servidor se necessário
+const enderecoServidorFallback = "http://localhost/TotemVotacao/server/"; // Endereço de fallback caso o servidor principal não esteja acessível. Normalmente é o endereço localhost!
+
+/////////////////////////////////////////////////////////////////
+// Abaixo, código do sistema. Evite alterações se não souber o que está fazendo!
+const cpfInput = document.getElementById('cpfInput');
 const barraTimer = document.getElementById("timer");
 const avisoCPF = document.getElementById("avisoCPF");
-const imgFotoSelecionada = document.getElementById("fotoSelecionada");
-const nomesFotos = [
-	"Cacoal, aromas de época",
-	"Secagem do cacau",
-	"Raízes da esperança",
-	"Ouro nas mãos",
-	"O novo eldorado",
-	"Fases do cacau: Da flor ao chocolate",
-	"Exuberância efêmera",
-	"Duas metades",
-	"Com as mãos no café",
-	"Café na manhã"
-];
-const nomeFotoSelecionada = document.getElementById("nomeFotoSelecionada");
+const imgFotoSelecionada = document.getElementById("imagemSelecionada");
+const nomeFotoSelecionada = document.getElementById("nomeImagemSelecionada");
 const divAlertaFallback = document.getElementById("alertaFallback");
+const divTecladoOpcoes = document.getElementById("tecladoOpcoes");
+const divApoiadores = document.getElementById("apoiadores");
 
 // Verifica se o servidor está acessível
-const enderecoServidorNormal = "http://localhost/TotemVotacao/server/"; // Altere para o endereço do seu servidor se necessário
-const enderecoServidorFallback = "http://localhost/TotemVotacao/server/"; // Endereço de fallback caso o servidor principal não esteja acessível
 var enderecoServidor = enderecoServidorNormal; // Variável para armazenar o endereço do servidor
 
 function verificarServidor() {
@@ -46,8 +67,26 @@ verificarServidor();
 
 var timerRetornar = null;
 var telaAtiva = "comecar";
-var tempoPadrao = 20000;
-var tempoFim = 5000;
+var numOpcoes = nomesFotos.length;
+var votacaoDireta = (numOpcoes <= 10);
+if (votacaoDireta) {
+	for (let i = 0; i < numOpcoes; i++) {
+		const botao = document.createElement("button");
+		botao.id = "botaoVoto" + (i === 9 ? '0' : (i + 1).toString()); // Ajusta o ID para que a opção 0 seja o botão '0'
+		botao.textContent = (i === 9 ? '0' : (i + 1).toString());
+		botao.onclick = () => votar(i === 9 ? '0' : (i + 1).toString()); // Ajusta a função para que a opção 0 seja o voto '0'
+		divTecladoOpcoes.appendChild(botao);
+	}
+}
+
+var numApoiadores = logosApoiadores.length;
+for (let i = 0; i < numApoiadores; i++) {
+	const imgLogo = document.createElement("img");
+	imgLogo.src = logosApoiadores[i];
+	imgLogo.alt = "Apoiador " + (i + 1);
+	imgLogo.className = "logo";
+	divApoiadores.appendChild(imgLogo);
+}
 
 // Função para adicionar números ao campo de CPF
 function adicionarNumero(numero) {
@@ -105,10 +144,15 @@ function alertarCPF() {
 // Função para avançar para a votação
 function votar(opcao) {
 	if (opcao) {
-		document.getElementById('opcaoSelecionada').textContent = opcao;
-		imgFotoSelecionada.src = `fotos/${opcao}.jpg`; // Atualiza a imagem com base na opção selecionada
+		console.log(typeof opcao);
+		if (opcao == 0) {
+			opcao = 10; // Opção 0 corresponde à foto 10
+		}
+		opcao -= 1; // Ajusta o índice para começar em 0
+		document.getElementById('opcaoSelecionada').textContent = (opcao + 1);
+		imgFotoSelecionada.src = `imagens/${opcao + 1}.jpg`; // Atualiza a imagem com base na opção selecionada
 		nomeFotoSelecionada.textContent = '"' + nomesFotos[opcao] + '"'; // Atualiza o nome da foto
-		ativarTela("confirmar", 30000);
+		ativarTela("confirmar");
 	} else {
 		const cpfValido = validaCPF(document.getElementById('cpfInput').value);
 		if (cpfValido) {
@@ -125,12 +169,12 @@ function votar(opcao) {
 						avisoCPF.style.display = "none";
 					}
 					travarTela("cpf", false);
-					ativarTela("votacao", 30000);
+					ativarTela("votacao");
 				})
 				.catch(error => {
 					console.error('Erro ao consultar o servidor:', error);
 					travarTela("cpf", false);
-					ativarTela("votacao", 30000);
+					ativarTela("votacao");
 				});
 		}
 	}
@@ -202,6 +246,12 @@ function resetarTimer(argTempo = tempoPadrao) {
 	barraTimer.style.animationPlayState = "running";
 	barraTimer.style.height = "1rem";
 }
+function simulacaoMouseAtivo(argElemento) {
+    argElemento.classList.add("active");
+	setTimeout(() => {
+		argElemento.classList.remove("active");
+	}, 150);
+}
 function computarTecla(event) {
 	console.log(event.key || event.code);
 	switch (telaAtiva) {
@@ -212,9 +262,13 @@ function computarTecla(event) {
 			if (event.key >= '0' && event.key <= '9') {
 				event.preventDefault();
 				adicionarNumero(event.key);
+				simulacaoMouseAtivo(document.getElementById('botaoCPF' + event.key));
 			} else if (event.key === 'Backspace') {
+				event.preventDefault();
 				limpar();
 			} else if (event.key === 'Enter') {
+				event.preventDefault();
+				simulacaoMouseAtivo(document.getElementById('btnVotar'));
 				votar();
 			}
 		} break;
@@ -223,19 +277,24 @@ function computarTecla(event) {
 				event.preventDefault();
 				let voto = event.key;
 				votar(voto);
+				simulacaoMouseAtivo(document.getElementById('botaoVoto' + event.key));
 			}
 		} break;
 		case "confirmar": {
 			event.preventDefault();
 			if (event.key === 'Enter') {
 				confirmarVoto();
+				simulacaoMouseAtivo(document.getElementById('btnConfirmarVoto'));
 			} else {
 				cancelarVoto();
+				simulacaoMouseAtivo(document.getElementById('btnCancelarVoto'));
 			}
 		} break;
 	}
 	if (telaAtiva !== "fim") {
 		resetarTimer();
+	} else {
+		event.preventDefault();
 	}
 }
 

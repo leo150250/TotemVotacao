@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 	<head>
 		<meta charset='utf-8'>
-		<title>Votação IFRO</title>
+		<title>Vox Populi - IFRO</title>
 		<meta name='viewport' content='width=device-width, initial-scale=1'>
 		<link rel='stylesheet' type='text/css' media='screen' href='estilo.css'>
 	</head>
@@ -10,14 +10,10 @@
 		<div id="wrapper">
 			<div id="comecar" onclick="reiniciar()">
 				<fieldset>
-					<img src="logo_cafecau.png" alt="Cafecau" class="logo">
+					<img src="logo_evento.png" alt="Evento" class="logo">
 					<p class="piscar">Aperte para começar!</p>
-					<div class="apoiadores">
-						<img src="logo_sicoob_credip.png" alt="Sicoob Credip" class="logo">
+					<div class="apoiadores" id="apoiadores">
 						<img src="logo_ifro.png" alt="IFRO" class="logo">
-						<img src="logo_pmc.png" alt="Prefeitura Municipal de Cacoal" class="logo">
-						<img src="logo_semc.png" alt="Secretaria Municipal de Cultura de Cacoal" class="logo">
-						<img src="logo_comunica.PNG" alt="Comunica Estratégia e Marketing" class="logo">
 					</div>
 				</fieldset>
 			</div>
@@ -26,16 +22,16 @@
 					<p>Digite seu CPF:</p>
 					<input type="text" id="cpfInput" placeholder="000.000.000-00" maxlength="14" onkeypress="mascara(this, '###.###.###-##');">
 					<div id="teclado">
-						<button onclick="adicionarNumero('1')">1</button>
-						<button onclick="adicionarNumero('2')">2</button>
-						<button onclick="adicionarNumero('3')">3</button>
-						<button onclick="adicionarNumero('4')">4</button>
-						<button onclick="adicionarNumero('5')">5</button>
-						<button onclick="adicionarNumero('6')">6</button>
-						<button onclick="adicionarNumero('7')">7</button>
-						<button onclick="adicionarNumero('8')">8</button>
-						<button onclick="adicionarNumero('9')">9</button>
-						<button onclick="adicionarNumero('0')">0</button>
+						<button id="botaoCPF1" onclick="adicionarNumero('1')">1</button>
+						<button id="botaoCPF2" onclick="adicionarNumero('2')">2</button>
+						<button id="botaoCPF3" onclick="adicionarNumero('3')">3</button>
+						<button id="botaoCPF4" onclick="adicionarNumero('4')">4</button>
+						<button id="botaoCPF5" onclick="adicionarNumero('5')">5</button>
+						<button id="botaoCPF6" onclick="adicionarNumero('6')">6</button>
+						<button id="botaoCPF7" onclick="adicionarNumero('7')">7</button>
+						<button id="botaoCPF8" onclick="adicionarNumero('8')">8</button>
+						<button id="botaoCPF9" onclick="adicionarNumero('9')">9</button>
+						<button id="botaoCPF0" onclick="adicionarNumero('0')">0</button>
 						<button onclick="limpar()">Limpar</button>
 					</div>
 					<button id="btnVotar" onclick="votar()" class="destaque">Avançar</button>
@@ -47,27 +43,18 @@
 						O CPF informado já possui um voto registrado! Vote abaixo para alterar o seu voto.
 					</div>
 					<p>Vote na sua foto preferida:</p>
-					<div class="opcoes">
-						<button onclick="votar('1')">1</button>
-						<button onclick="votar('2')">2</button>
-						<button onclick="votar('3')">3</button>
-						<button onclick="votar('4')">4</button>
-						<button onclick="votar('5')">5</button>
-						<button onclick="votar('6')">6</button>
-						<button onclick="votar('7')">7</button>
-						<button onclick="votar('8')">8</button>
-						<button onclick="votar('9')">9</button>
-						<button onclick="votar('0')">0</button>
+					<div class="opcoes" id="tecladoOpcoes">
+						<!-- Botões de opções serão gerados aqui via JavaScript -->
 					</div>
 				</fieldset>
 			</div>
 			<div id="confirmar" onclick="resetarTimer()">
 				<fieldset>
 					<p>Você votou na foto: <span id="opcaoSelecionada"></span></p>
-					<img src="#" alt="Foto selecionada" id="fotoSelecionada">
-					<p id="nomeFotoSelecionada"></p>
-					<button onclick="confirmarVoto()" class="destaque">Confirmar</button>
-					<button onclick="cancelarVoto()">Cancelar</button>
+					<img src="#" alt="Opção selecionada" id="imagemSelecionada">
+					<p id="nomeImagemSelecionada"></p>
+					<button id="btnConfirmarVoto" onclick="confirmarVoto()" class="destaque">Confirmar</button>
+					<button id="btnCancelarVoto" onclick="cancelarVoto()">Cancelar</button>
 				</fieldset>
 			</div>
 			<div id="fim">

@@ -95,7 +95,7 @@ if (isset($_GET['voto'])) {
     }
     // Faz um backup do arquivo de votos
     if (file_exists($filePath)) {
-        copy($filePath, $filePath . ' - ' . $timestamp . '.bak');
+        copy($filePath, $filePath . ' - ' . date('YmdHis') . '.bak');
     }
     // Salva os votos atualizados
     file_put_contents($filePath, json_encode($votos, JSON_PRETTY_PRINT));
