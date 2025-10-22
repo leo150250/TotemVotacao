@@ -1,8 +1,9 @@
-const cpfInput = document.getElementById('cpfInput');
+﻿const cpfInput = document.getElementById('cpfInput');
 const barraTimer = document.getElementById("timer");
 const avisoCPF = document.getElementById("avisoCPF");
 const imgFotoSelecionada = document.getElementById("fotoSelecionada");
 const nomesFotos = [
+	"Cacoal, aromas de época",
 	"Secagem do cacau",
 	"Raízes da esperança",
 	"Ouro nas mãos",
@@ -11,8 +12,7 @@ const nomesFotos = [
 	"Exuberância efêmera",
 	"Duas metades",
 	"Com as mãos no café",
-	"Café na manhã",
-	"Cacoal, aromas de época"
+	"Café na manhã"
 ];
 const nomeFotoSelecionada = document.getElementById("nomeFotoSelecionada");
 const divAlertaFallback = document.getElementById("alertaFallback");
@@ -46,7 +46,7 @@ verificarServidor();
 
 var timerRetornar = null;
 var telaAtiva = "comecar";
-var tempoPadrao = 10000;
+var tempoPadrao = 20000;
 var tempoFim = 5000;
 
 // Função para adicionar números ao campo de CPF
@@ -107,8 +107,8 @@ function votar(opcao) {
 	if (opcao) {
 		document.getElementById('opcaoSelecionada').textContent = opcao;
 		imgFotoSelecionada.src = `fotos/${opcao}.jpg`; // Atualiza a imagem com base na opção selecionada
-		nomeFotoSelecionada.textContent = '"' + nomesFotos[opcao - 1] + '"'; // Atualiza o nome da foto
-		ativarTela("confirmar", 20000);
+		nomeFotoSelecionada.textContent = '"' + nomesFotos[opcao] + '"'; // Atualiza o nome da foto
+		ativarTela("confirmar", 30000);
 	} else {
 		const cpfValido = validaCPF(document.getElementById('cpfInput').value);
 		if (cpfValido) {
@@ -125,12 +125,12 @@ function votar(opcao) {
 						avisoCPF.style.display = "none";
 					}
 					travarTela("cpf", false);
-					ativarTela("votacao", 20000);
+					ativarTela("votacao", 30000);
 				})
 				.catch(error => {
 					console.error('Erro ao consultar o servidor:', error);
 					travarTela("cpf", false);
-					ativarTela("votacao", 20000);
+					ativarTela("votacao", 30000);
 				});
 		}
 	}
@@ -222,9 +222,6 @@ function computarTecla(event) {
 			if (event.key >= '0' && event.key <= '9') {
 				event.preventDefault();
 				let voto = event.key;
-				if (voto == "0") {
-					voto = "10";
-				}
 				votar(voto);
 			}
 		} break;
@@ -232,7 +229,7 @@ function computarTecla(event) {
 			event.preventDefault();
 			if (event.key === 'Enter') {
 				confirmarVoto();
-			} else if (event.key === 'Esc' || event.key === 'Escape' || event.key === 'Backspace') {
+			} else {
 				cancelarVoto();
 			}
 		} break;

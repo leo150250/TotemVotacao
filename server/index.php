@@ -2,6 +2,7 @@
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
+date_default_timezone_set("America/Porto_Velho");
 
 // Define file path
 $filePath = __DIR__ . '/votos.json';
@@ -94,7 +95,7 @@ if (isset($_GET['voto'])) {
     }
     // Faz um backup do arquivo de votos
     if (file_exists($filePath)) {
-        copy($filePath, $filePath . '.bak');
+        copy($filePath, $filePath . ' - ' . $timestamp . '.bak');
     }
     // Salva os votos atualizados
     file_put_contents($filePath, json_encode($votos, JSON_PRETTY_PRINT));
