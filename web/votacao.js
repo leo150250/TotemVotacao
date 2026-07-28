@@ -1,5 +1,7 @@
 ﻿// Personalize seu sistema alterando estas variáveis abaixo
 
+var touchScreen = true; // Define se o sistema usará tela sensível ao toque (true) ou teclado físico (false)
+
 // Nomes das opções de votação. Observe que o número de itens nesta lista define o número de opções disponíveis na votação.
 const nomesFotos = [
 	"Café 01",
