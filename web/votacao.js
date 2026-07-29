@@ -278,6 +278,16 @@ function computarTecla(event) {
 			if (event.key >= '0' && event.key <= '9') {
 				event.preventDefault();
 				let voto = event.key;
+				let opcao = parseInt(voto);
+				//console.log(opcao);
+				if (opcao == 0) {
+					opcao = 10; // Opção 0 corresponde à foto 10
+				}
+				opcao -= 1; // Ajusta o índice para começar em 0
+				if (nomesFotos[opcao] === undefined) {
+					console.log("Opção inválida!");
+					return;
+				}
 				votar(voto);
 				simulacaoMouseAtivo(document.getElementById('botaoVoto' + event.key));
 			}
