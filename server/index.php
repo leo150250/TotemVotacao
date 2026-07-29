@@ -63,6 +63,77 @@ if (isset($_GET['admin'])) {
     exit;
 }
 
+if (isset($_GET['apuracao'])) {
+    $apuracaoDir = __DIR__ . '/apuracao';
+    $allVotos = [];
+
+    // Lê todos os arquivos .json e .bak da pasta apuracao
+    if (is_dir($apuracaoDir)) {
+        $files = glob($apuracaoDir . '/*.{json,bak}', GLOB_BRACE);
+        foreach ($files as $file) {
+            $json = file_get_contents($file);
+            if ($json === false) continue;
+            $votosArquivo = json_decode($json, true);
+            if (!is_array($votosArquivo)) continue;
+            foreach ($votosArquivo as $voto) {
+                $cpf = $voto['cpf'];
+                // Se já existe, compara timestamp
+                if (isset($allVotos[$cpf])) {
+                    if (strtotime($voto['timestamp']) > strtotime($allVotos[$cpf]['timestamp'])) {
+                        $allVotos[$cpf] = $voto;
+                    }
+                } else {
+                    $allVotos[$cpf] = $voto;
+                }
+            }
+        }
+    }
+
+    // Calcula o resumo: quantidade de votos por opção
+    $resumo = [];
+    foreach ($allVotos as $voto) {
+        $opcao = $voto['opcao'];
+        if (!isset($resumo[$opcao])) {
+            $resumo[$opcao] = 0;
+        }
+        $resumo[$opcao]++;
+    }
+    arsort($resumo);
+
+    header('Content-Type: text/html; charset=utf-8');
+    echo "<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Apuração - Votação</title></head><body>";
+    echo "<h2>Resumo de Votos (Apuração)</h2>";
+    echo "<table border='1' cellpadding='5'><tr><th>Opção</th><th>Total</th></tr>";
+    foreach ($resumo as $opcao => $total) {
+        echo "<tr><td>{$opcao}</td><td>{$total}</td></tr>";
+    }
+    echo "<tr><td><strong>Total</strong></td><td><strong>" . array_sum($resumo) . "</strong></td></tr>";
+    echo "</table><br>";
+
+    echo "<h2>Detalhamento de Votos (Apuração)</h2>";
+    echo "<table border='1' cellpadding='5'><tr><th>Timestamp</th><th>CPF</th><th>Opção</th></tr>";
+    foreach ($allVotos as $voto) {
+        echo "<tr><td>{$voto['timestamp']}</td><td>{$voto['cpf']}</td><td>{$voto['opcao']}</td></tr>";
+    }
+    echo "</table></body></html>";
+
+    echo "<h2>Arquivos de Apuração Encontrados</h2>";
+    echo "<table border='1' cellpadding='5'><tr><th>Arquivo</th><th>Quantidade de Votos</th></tr>";
+    if (!empty($files)) {
+        foreach ($files as $file) {
+            $json = file_get_contents($file);
+            $votosArquivo = json_decode($json, true);
+            $count = is_array($votosArquivo) ? count($votosArquivo) : 0;
+            $fileName = basename($file);
+            echo "<tr><td>{$fileName}</td><td>{$count}</td></tr>";
+        }
+    } else {
+        echo "<tr><td colspan='2'>Nenhum arquivo encontrado</td></tr>";
+    }
+    echo "</table><br>";
+    exit;
+}
+
 // Se "voto" for enviado, insere/atualiza o voto
 if (isset($_GET['voto'])) {
     if (!isset($_GET['cpf']) || empty($_GET['cpf'])) {
