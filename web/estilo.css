@@ -1,12 +1,19 @@
+:root {
+	--corPrincipal: #000;
+	--corBarra: #000;
+	--fundoTelas: #FFF8;
+	--imagemFundo: url("fundo1.png");
+}
 body {
 	width: 100%;
 	height: 100%;
 	margin: 0px;
 	font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 	font-size: 4em;
-	background-image: url("fundo1.png");
+	background-image: var(--imagemFundo);
 	background-size: cover;
 	background-position: center;
+	color: var(--corPrincipal);
 }
 p {
 	margin: 1rem;
@@ -87,7 +94,7 @@ input[type="text"].alerta::placeholder {
 	}
 	50% {
 		left: 0.5rem;
-		background-color: #FFF8;
+		background-color: var(--fundoTelas);
 	}
 	60% {
 		left: -0.5rem;
@@ -126,7 +133,7 @@ input[type="text"].alerta::placeholder {
 fieldset {
 	border: 1px solid #0002;
 	box-shadow: 2px 5px 10px #0008;
-	background-color: #FFF8;
+	background-color: var(--fundoTelas);
 	border-radius: 1rem;
 	margin: 0px;
 	padding: 2rem 2rem;
@@ -173,11 +180,11 @@ fieldset {
 }
 @keyframes timer {
 	0% {
-		background-color: #000;
+		background-color: var(--corBarra);
 		width: 100%;
 	}
 	75% {
-		background-color: #000;
+		background-color: var(--corBarra);
 	}
 	100% {
 		background-color: #F00;
