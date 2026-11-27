@@ -1,2 +1,3 @@
 server/votos.json
 server/*.bak
+server/apuracao/*
